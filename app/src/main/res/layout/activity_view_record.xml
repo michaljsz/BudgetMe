@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <!--<TextView-->
+        <!--android:id="@+id/id"-->
+        <!--android:layout_width="42dp"-->
+        <!--android:layout_height="32dp"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:padding="3dp"-->
+        <!--android:visibility="visible" />-->
+
+    <ImageView
+        android:id="@+id/typeIconDisplay"
+        android:layout_width="40dp"
+        android:layout_height="64dp"
+        android:layout_alignParentStart="true"
+        android:padding="3dp"
+        android:gravity="center_vertical"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/dateDisplay"
+        android:layout_width="128dp"
+        android:layout_height="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@id/typeIconDisplay"
+        android:padding="3dp"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/amountDisplay"
+        android:layout_width="128dp"
+        android:layout_height="32dp"
+        android:layout_below="@id/dateDisplay"
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@id/typeIconDisplay"
+        android:ellipsize="end"
+        android:padding="3dp"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="visible" />
+
+    <TextView
+        android:id="@+id/descriptionDisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="64dp"
+        android:layout_marginStart="16dp"
+        android:layout_toEndOf="@id/amountDisplay"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
+        android:padding="3dp"
+        android:textSize="18sp"
+        android:text="TextView" />
+
+</RelativeLayout>
