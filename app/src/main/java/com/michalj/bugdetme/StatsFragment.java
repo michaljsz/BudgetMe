@@ -71,7 +71,8 @@ public class StatsFragment extends Fragment {
         dataSet.setColors(ColorTemplate.LIBERTY_COLORS);
         pieChart.setDescription("");
         pieChart.setDrawHoleEnabled(false);
-        data.setValueTextSize(16f);
+        data.setValueTextSize(17f);
+        pieChart.getLegend().setEnabled(false);
     }
 
 

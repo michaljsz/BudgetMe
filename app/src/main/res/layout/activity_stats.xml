@@ -12,15 +12,15 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Spending in current month"
-        android:textSize="18sp"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/typePieChart"
-        android:layout_width="360dp"
-        android:layout_height="360dp"
+        android:layout_width="320dp"
+        android:layout_height="320dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
