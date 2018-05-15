@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -44,16 +45,8 @@ public class AddNewExpense extends AppCompatActivity implements AdapterView.OnIt
 
         final TextView descriptionEditText = findViewById(R.id.descriptionInput);
 
-        List<String> expenditureTypes = new ArrayList();
-        expenditureTypes.add("FMCG");
-        expenditureTypes.add("Utilities");
-        expenditureTypes.add("Car");
-        expenditureTypes.add("Kids");
-        expenditureTypes.add("Leisure");
-        expenditureTypes.add("Health");
-        expenditureTypes.add("Clothes");
-
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, expenditureTypes);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, DatabaseHelper.TYPES_OF_EXPENSES);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         typeSpinner.setAdapter(dataAdapter);
 
