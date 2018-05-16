@@ -1,15 +1,13 @@
 package com.michalj.bugdetme;
 
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
+
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -24,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String DESCRIPTION = "description";
 
     // Types of expenses
-    public static final ArrayList<String> TYPES_OF_EXPENSES = new ArrayList(Arrays.asList("FMCG", "Utilities", "Car", "Kids",
+    public static final ArrayList<String> TYPES_OF_EXPENSES = new ArrayList<>(Arrays.asList("FMCG", "Utilities", "Car", "Kids",
             "Leisure", "Health", "Clothes"));
 
     // Database Information

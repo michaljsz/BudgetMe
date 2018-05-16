@@ -10,11 +10,8 @@ import android.database.sqlite.SQLiteDatabase;
 public class DBManager {
 
     private DatabaseHelper dbHelper;
-
-    private Context context;
-
+    private final Context context;
     private SQLiteDatabase database;
-
     public DBManager(Context c) {
         context = c;
     }
@@ -57,6 +54,7 @@ public class DBManager {
         return database.rawQuery("SELECT COALESCE(sum(" + DatabaseHelper.AMOUNT + "),0) FROM " + DatabaseHelper.TABLE_NAME +
                 " WHERE " + DatabaseHelper.TYPE + " = " + "'"+expenseType+"'", null);
     }
+
 
 //    public int update(long _id, String name, String desc) {
 //        ContentValues contentValues = new ContentValues();

@@ -6,7 +6,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 
 public class CustomPagerAdapter extends FragmentStatePagerAdapter {
 
-    private int mNumOfTabs;
+    private final int mNumOfTabs;
 
     public CustomPagerAdapter(FragmentManager fm, int NumOfTabs) {
         super(fm);
@@ -18,14 +18,11 @@ public class CustomPagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                HomeFragment tab1 = new HomeFragment();
-                return tab1;
+                return new HomeFragment();
             case 1:
-                ExpensesListFragment tab2 = new ExpensesListFragment();
-                return tab2;
+                return new ExpensesListFragment();
             case 2:
-                StatsFragment tab3 = new StatsFragment();
-                return  tab3;
+                return new StatsFragment();
             default:
                 return null;
         }

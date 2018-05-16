@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    private SharedPreferences pref;
     public static final String MONTHLY_GOAL = "Monthly goal";
 
     @Override
@@ -24,10 +23,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final ViewPager viewPager =  findViewById(R.id.pager);
-        pref = getApplicationContext().getSharedPreferences("MyPref", 0);
+        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
         SharedPreferences.Editor editor = pref.edit();
         editor.putFloat(MONTHLY_GOAL,4000F);
-        editor.commit();
+        editor.apply();
 
         TabLayout tabLayout =  findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Month"));
@@ -40,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(0);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
@@ -90,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
+//        int id = item.getItemId();
 //        if (id == R.id.action_settings) {
 //            return true;
 //        }

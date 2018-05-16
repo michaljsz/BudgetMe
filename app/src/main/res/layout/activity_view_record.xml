@@ -20,7 +20,8 @@
         android:layout_alignParentStart="true"
         android:padding="3dp"
         android:gravity="center_vertical"
-        android:visibility="visible" />
+        android:visibility="visible"
+        android:contentDescription="expense type"/>
 
     <TextView
         android:id="@+id/dateDisplay"

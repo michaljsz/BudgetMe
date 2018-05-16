@@ -21,11 +21,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
+
 
 public class AddNewExpense extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -45,7 +43,7 @@ public class AddNewExpense extends AppCompatActivity implements AdapterView.OnIt
 
         final TextView descriptionEditText = findViewById(R.id.descriptionInput);
 
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, DatabaseHelper.TYPES_OF_EXPENSES);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         typeSpinner.setAdapter(dataAdapter);
@@ -61,7 +59,7 @@ public class AddNewExpense extends AppCompatActivity implements AdapterView.OnIt
             @Override
             public void onClick(View arg0) {
                 amountString = amountEditText.getText().toString();
-                if (!amountString.isEmpty() && amountString.length() > 0) {
+                if (!amountString.isEmpty()) {
                     try {
                         amountDouble = Double.parseDouble(amountString)*100;
                         amountInt = (int) amountDouble;
@@ -78,7 +76,7 @@ public class AddNewExpense extends AppCompatActivity implements AdapterView.OnIt
                         description = descriptionEditText.getText().toString();
                         dbManager.insert(date, amountInt, type, description);
 
-                        if (chosenType == "Transport") {
+                        if (chosenType.equalsIgnoreCase("Transport")) {
                             alertFormElements();
                         } else {
                             finish();
@@ -112,7 +110,7 @@ public class AddNewExpense extends AppCompatActivity implements AdapterView.OnIt
 
     }
 
-    public void alertFormElements() {
+    private void alertFormElements() {
 
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View formElementsView = inflater.inflate(R.layout.car_data,

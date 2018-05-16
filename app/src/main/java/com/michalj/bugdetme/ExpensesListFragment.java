@@ -13,12 +13,9 @@ import android.widget.TextView;
 
 public class ExpensesListFragment extends Fragment {
 
-    private DBManager dbManager;
-    private ListView listView;
-    private SimpleCursorAdapter adapter;
-    final String[] from = new String[] { DatabaseHelper.DATE, DatabaseHelper.AMOUNT,
+    private final String[] from = new String[] { DatabaseHelper.DATE, DatabaseHelper.AMOUNT,
             DatabaseHelper.TYPE, DatabaseHelper.DESCRIPTION};
-    final int[] to = new int[] { R.id.dateDisplay, R.id.amountDisplay, R.id.typeIconDisplay,
+    private final int[] to = new int[] { R.id.dateDisplay, R.id.amountDisplay, R.id.typeIconDisplay,
             R.id.descriptionDisplay};
 
     @Override
@@ -27,12 +24,12 @@ public class ExpensesListFragment extends Fragment {
     }
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        dbManager = new DBManager(getActivity());
+        DBManager dbManager = new DBManager(getActivity());
         dbManager.open();
         Cursor cursor = dbManager.fetch();
-        listView = view.findViewById(R.id.expanses_list);
+        ListView listView = view.findViewById(R.id.expanses_list);
         listView.setEmptyView(view.findViewById(R.id.empty));
-        adapter = new SimpleCursorAdapter(getActivity(), R.layout.activity_view_record, cursor, from, to, 0);
+        SimpleCursorAdapter adapter = new SimpleCursorAdapter(getActivity(), R.layout.activity_view_record, cursor, from, to, 0);
         adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
             public boolean setViewValue(View aView, Cursor aCursor, int aColumnIndex) {
                 if (aColumnIndex == 2) {
@@ -46,7 +43,7 @@ public class ExpensesListFragment extends Fragment {
                     String type = aCursor.getString(aColumnIndex);
                     if (type.equalsIgnoreCase("fmcg")) {
                         img.setImageResource(R.drawable.fmcg);
-                    } else if (type.equalsIgnoreCase("bills")) {
+                    } else if (type.equalsIgnoreCase("Utilities")) {
                         img.setImageResource(R.drawable.utilities);
                     } else if (type.equalsIgnoreCase("transport")) {
                         img.setImageResource(R.drawable.car);
@@ -54,6 +51,10 @@ public class ExpensesListFragment extends Fragment {
                         img.setImageResource(R.drawable.kids);
                     } else if (type.equalsIgnoreCase("leisure")) {
                             img.setImageResource(R.drawable.leisure);
+                    } else if (type.equalsIgnoreCase("health")) {
+                        img.setImageResource(R.drawable.health);
+                    } else if (type.equalsIgnoreCase("clothes")) {
+                        img.setImageResource(R.drawable.clothes);
                     }
                     return true;
                 }

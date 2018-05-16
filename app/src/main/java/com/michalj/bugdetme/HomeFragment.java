@@ -12,16 +12,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.PieChart;
-
-import org.w3c.dom.Text;
 
 import java.util.Calendar;
 
 public class HomeFragment extends Fragment {
 
-    private DBManager dbManager;
-    private SharedPreferences pref;
     private double totalAmountDouble;
 
     @Override
@@ -31,19 +26,19 @@ public class HomeFragment extends Fragment {
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        dbManager = new DBManager(getActivity());
+        DBManager dbManager = new DBManager(getActivity());
         dbManager.open();
         Cursor cursor = dbManager.expensesInCurrentMonth();
         cursor.moveToFirst();
         TextView totalAmount = view.findViewById(R.id.amountInCurrentMonth);
         if ( cursor.getString(0) != null ) {
             totalAmountDouble = Double.parseDouble(cursor.getString(0)) / 100;
-            totalAmount.setText("" + totalAmountDouble);
+            totalAmount.setText(String.valueOf(totalAmountDouble));
         } else {
             totalAmount.setText(R.string.NoExpensesThisMonth);
         }
 
-        pref = getActivity().getApplicationContext().getSharedPreferences("MyPref", 0);
+        SharedPreferences pref = getActivity().getApplicationContext().getSharedPreferences("MyPref", 0);
         double monthlyGoal = pref.getFloat(MainActivity.MONTHLY_GOAL,0);
         TextView remainingToGoal = getActivity().findViewById(R.id.remainingAmountToGoal);
         double remainingFunds = monthlyGoal-totalAmountDouble;
