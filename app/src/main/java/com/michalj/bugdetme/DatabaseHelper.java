@@ -21,6 +21,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TYPE = "type";
     public static final String DESCRIPTION = "description";
 
+    // Shared preferences
+    public static final String SHARED_PREFERENCES_NAME = "Budged prefs";
+    public static final String MONTHLY_BUDGET = "Monthly budget";
+    public static final String SAVINGS_GOAL = "Savings goal";
+
+
     // Types of expenses
     public static final ArrayList<String> TYPES_OF_EXPENSES = new ArrayList<>(Arrays.asList("FMCG", "Utilities", "Car", "Kids",
             "Leisure", "Health", "Clothes"));

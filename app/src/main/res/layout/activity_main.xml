@@ -26,6 +26,6 @@
         android:layout_alignParentTop="true"
         android:background="?android:attr/selectableItemBackground"
         android:drawablePadding="16dp"
-        android:drawableLeft="@drawable/menu_icon"/>
+        android:drawableStart="@drawable/menu_icon"/>
 
 </RelativeLayout>

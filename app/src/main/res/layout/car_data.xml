@@ -11,7 +11,7 @@
         android:ems="10"
         android:inputType="numberDecimal"
         android:layout_alignParentTop="true"
-        android:hint="Car mileage">
+        android:hint="@string/car_mileage">
 
 
     </EditText>
@@ -20,7 +20,7 @@
         android:id="@+id/myCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Have you refueled?"
+        android:text="@string/have_you_refueled"
         android:layout_below="@id/carMileage"/>
 
     <RadioGroup
@@ -34,14 +34,14 @@
             android:id="@+id/petrolRadioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Petrol" />
+            android:text="@string/petrol" />
 
 
         <RadioButton
             android:id="@+id/lpgRadioButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="LPG" />
+            android:text="@string/lpg" />
 
     </RadioGroup>
 

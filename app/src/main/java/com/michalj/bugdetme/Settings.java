@@ -1,10 +1,12 @@
 package com.michalj.bugdetme;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.File;
@@ -18,6 +20,25 @@ public class Settings extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        final SharedPreferences pref = this.getApplicationContext().getSharedPreferences(DatabaseHelper.SHARED_PREFERENCES_NAME, 0);
+        final EditText monthlyBudget = findViewById(R.id.editTextMonthlyBudget);
+        final EditText savingsGoal = findViewById(R.id.editTextSavingsGoal);
+        monthlyBudget.setText(String.valueOf(pref.getFloat(DatabaseHelper.MONTHLY_BUDGET,0)));
+        savingsGoal.setText(String.valueOf(pref.getFloat(DatabaseHelper.SAVINGS_GOAL,0)));
+
+        Button submitButton = findViewById(R.id.submitBudgetAndGoal);
+        submitButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                SharedPreferences.Editor editor = pref.edit();
+                editor.putFloat(DatabaseHelper.MONTHLY_BUDGET,Float.parseFloat(monthlyBudget.getText().toString()));
+                editor.putFloat(DatabaseHelper.SAVINGS_GOAL,Float.parseFloat(savingsGoal.getText().toString()));
+                editor.apply();
+                Toast.makeText(Settings.this,"Changes saved",Toast.LENGTH_SHORT).show();
+            }
+        });
 
         Button backupButton = findViewById(R.id.dbBackupButton);
         backupButton.setOnClickListener(new View.OnClickListener() {

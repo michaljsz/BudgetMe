@@ -9,6 +9,7 @@
         android:id="@+id/expanses_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:divider="#52c0b7"
         android:dividerHeight="1dp"
         android:padding="10dp" >
     </ListView>

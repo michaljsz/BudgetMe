@@ -3,6 +3,7 @@ package com.michalj.bugdetme;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -12,11 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.PopupMenu;
-import android.widget.Toast;
-
 public class MainActivity extends AppCompatActivity {
 
-    public static final String MONTHLY_GOAL = "Monthly goal";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,15 +22,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         final ViewPager viewPager =  findViewById(R.id.pager);
         SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putFloat(MONTHLY_GOAL,4000F);
-        editor.apply();
+//        SharedPreferences.Editor editor = pref.edit();
+//        editor.putFloat(DatabaseHelper.MONTHLY_BUDGET,4000F);
+//        editor.apply();
 
         TabLayout tabLayout =  findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Month"));
         tabLayout.addTab(tabLayout.newTab().setText("List"));
         tabLayout.addTab(tabLayout.newTab().setText("Stats"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+        tabLayout.setSelectedTabIndicatorColor(Color.parseColor("#52c0b7"));
 
         final CustomPagerAdapter adapter = new CustomPagerAdapter
                 (getSupportFragmentManager(), tabLayout.getTabCount());
@@ -70,8 +69,6 @@ public class MainActivity extends AppCompatActivity {
                                     Settings.class);
                             startActivity(myIntent);
                         }
-
-                        Toast.makeText(MainActivity.this,"You Clicked : " + item.getTitle(),Toast.LENGTH_SHORT).show();
                         return true;
                     }
                 });

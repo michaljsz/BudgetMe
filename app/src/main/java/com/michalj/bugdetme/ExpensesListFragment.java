@@ -35,7 +35,7 @@ public class ExpensesListFragment extends Fragment {
                 if (aColumnIndex == 2) {
                     double amountInZl = Double.parseDouble(aCursor.getString(aColumnIndex))/100;
                     TextView textView = (TextView) aView;
-                    textView.setText(String.format("%.2f",amountInZl) + " zl");
+                    textView.setText(String.format("%.2f",amountInZl) + getString(R.string.PLN));
                     return true;
                 }
                 if (aColumnIndex == 3) {

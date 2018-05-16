@@ -33,21 +33,26 @@ public class HomeFragment extends Fragment {
         TextView totalAmount = view.findViewById(R.id.amountInCurrentMonth);
         if ( cursor.getString(0) != null ) {
             totalAmountDouble = Double.parseDouble(cursor.getString(0)) / 100;
-            totalAmount.setText(String.valueOf(totalAmountDouble));
+            totalAmount.setText(String.format("%.2f",totalAmountDouble)+getString(R.string.PLN));
         } else {
-            totalAmount.setText(R.string.NoExpensesThisMonth);
+            totalAmount.setText("0");
         }
 
-        SharedPreferences pref = getActivity().getApplicationContext().getSharedPreferences("MyPref", 0);
-        double monthlyGoal = pref.getFloat(MainActivity.MONTHLY_GOAL,0);
+        SharedPreferences pref = getActivity().getApplicationContext().getSharedPreferences(DatabaseHelper.SHARED_PREFERENCES_NAME, 0);
+        double monthlyGoal = pref.getFloat(DatabaseHelper.MONTHLY_BUDGET,0);
         TextView remainingToGoal = getActivity().findViewById(R.id.remainingAmountToGoal);
         double remainingFunds = monthlyGoal-totalAmountDouble;
-        remainingToGoal.setText(String.format("%.2f",(remainingFunds)));
+        remainingToGoal.setText(String.format("%.2f",(remainingFunds))+getString(R.string.PLN));
 
         TextView goalIndex = getActivity().findViewById(R.id.indexToGoal);
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_MONTH);
-        goalIndex.setText(String.format("%.2f",((totalAmountDouble)/(monthlyGoal/30.0*day)*100))+" %");
+        if (totalAmountDouble != 0 ) {
+            goalIndex.setText(String.format("%.2f",((totalAmountDouble)/(monthlyGoal/30.0*day)*100))+getString(R.string.percent));
+        } else {
+            goalIndex.setText("0");
+
+        }
         if ( ((totalAmountDouble)/(monthlyGoal/30.0*day)*100) < 100 ) {
             goalIndex.setTextColor(Color.parseColor("#008000"));
         } else {
