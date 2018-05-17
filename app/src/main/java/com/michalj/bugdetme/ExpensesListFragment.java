@@ -1,11 +1,14 @@
 package com.michalj.bugdetme;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -45,7 +48,8 @@ public class ExpensesListFragment extends Fragment {
                         img.setImageResource(R.drawable.fmcg);
                     } else if (type.equalsIgnoreCase("Utilities")) {
                         img.setImageResource(R.drawable.utilities);
-                    } else if (type.equalsIgnoreCase("transport")) {
+                    } else if (type.equalsIgnoreCase("car") ||
+                            type.equalsIgnoreCase("transport")) {
                         img.setImageResource(R.drawable.car);
                     } else if (type.equalsIgnoreCase("kids")) {
                         img.setImageResource(R.drawable.kids);
@@ -63,5 +67,12 @@ public class ExpensesListFragment extends Fragment {
         });
         adapter.notifyDataSetChanged();
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long viewId) {
+                Intent modify_intent = new Intent(getActivity().getApplicationContext(), ModifyExpense.class);
+                startActivity(modify_intent);
+            }
+        });
     }
 }

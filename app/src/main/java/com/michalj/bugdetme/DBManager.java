@@ -64,8 +64,8 @@ public class DBManager {
 //        return i;
 //    }
 //
-//    public void delete(long _id) {
-//        database.delete(DatabaseHelper.TABLE_NAME, DatabaseHelper._ID + "=" + _id, null);
-//    }
+    public void delete(long _id) {
+        database.delete(DatabaseHelper.TABLE_NAME, DatabaseHelper._ID + "=" + _id, null);
+    }
 
 }

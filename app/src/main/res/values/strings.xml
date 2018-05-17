@@ -26,4 +26,5 @@
     <string name="percent">\u0020 %</string>
     <string name="PLN">\u0020 zł</string>
     <string name="add_new_expense">Add new expense</string>
+    <string name="apply_changes">Apply changes</string>
 </resources>

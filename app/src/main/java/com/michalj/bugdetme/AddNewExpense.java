@@ -76,7 +76,7 @@ public class AddNewExpense extends AppCompatActivity implements AdapterView.OnIt
                         description = descriptionEditText.getText().toString();
                         dbManager.insert(date, amountInt, type, description);
 
-                        if (chosenType.equalsIgnoreCase("Transport")) {
+                        if (chosenType.equalsIgnoreCase("Transport") || chosenType.equalsIgnoreCase("car")) {
                             alertFormElements();
                         } else {
                             finish();
@@ -150,7 +150,7 @@ public class AddNewExpense extends AppCompatActivity implements AdapterView.OnIt
                         dialog.cancel();
                         finish();
                         Intent myIntent = new Intent(getBaseContext(),
-                                HomeFragment.class);
+                                MainActivity.class);
                         startActivity(myIntent);
                     }
 
