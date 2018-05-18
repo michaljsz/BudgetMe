@@ -1,14 +1,18 @@
 package com.michalj.bugdetme;
 
-import android.content.Intent;
+import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
@@ -70,9 +74,28 @@ public class ExpensesListFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long viewId) {
-                Intent modify_intent = new Intent(getActivity().getApplicationContext(), ModifyExpense.class);
-                startActivity(modify_intent);
+//                Intent modify_intent = new Intent(getActivity().getApplicationContext(), ModifyExpense.class);
+//                startActivity(modify_intent);
+                updateAlert();
             }
         });
+    }
+
+    private void updateAlert() {
+
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final View formElementsView = inflater.inflate(R.layout.modify_expense,
+                null, false);
+        final EditText amountEdit;
+        final Button updateBtn, deleteBtn;
+        final DBManager dbManager;
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(formElementsView)
+                .setTitle("Modify expense");
+        AlertDialog alert = builder.create();
+        alert.show();
+        alert.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
     }
 }

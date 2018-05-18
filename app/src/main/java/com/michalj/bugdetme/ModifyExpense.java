@@ -20,7 +20,7 @@ public class ModifyExpense extends Activity implements OnClickListener {
 
         setTitle("Modify expense");
 
-        setContentView(R.layout.activity_modify_expense);
+        setContentView(R.layout.modify_expense);
 
         dbManager = new DBManager(this);
         dbManager.open();
