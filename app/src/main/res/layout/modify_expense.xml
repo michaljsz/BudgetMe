@@ -2,9 +2,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="10dp"
     android:background="@drawable/rounded_layout">
+
+    <TextView
+        android:id="@+id/modifyExpenseTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="8dp"
+        android:text="Modify expense"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"/>
+
+    <Button
+        android:id="@+id/changeDateButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="changeDate" />
 
     <EditText
         android:id="@+id/amountEdit"
@@ -16,8 +35,16 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:textColorHint="@android:color/white"
-        android:ems="10"
         android:hint="Enter amount" />
+
+    <Spinner
+        android:id="@+id/modifyTypeSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"/>
 
     <EditText
         android:id="@+id/descriptionEdit"
@@ -27,7 +54,6 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="24dp"
         android:textColorHint="@android:color/white"
-        android:ems="10"
         android:hint="Enter description">
     </EditText>
 
