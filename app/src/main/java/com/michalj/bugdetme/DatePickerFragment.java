@@ -1,6 +1,5 @@
 package com.michalj.bugdetme;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.os.Bundle;
@@ -26,9 +25,11 @@ public class DatePickerFragment extends DialogFragment {
     private DatePickerDialog.OnDateSetListener dateSetListener =
             new DatePickerDialog.OnDateSetListener() {
                 public void onDateSet(DatePicker view, int year, int month, int day) {
-                    Toast.makeText(getActivity(), "selected date is " + view.getYear() +
-                            " / " + (view.getMonth()+1) +
-                            " / " + view.getDayOfMonth(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "selected date is " + view.getYear() +
+//                            " / " + (view.getMonth()+1) +
+//                            " / " + view.getDayOfMonth(), Toast.LENGTH_SHORT).show();
+                    ((MainActivity)getActivity()).setChosenDataAfterUpdate(view.getYear(),
+                            view.getMonth()+1, view.getDayOfMonth());
                 }
             };
 }

@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.PopupMenu;
 public class MainActivity extends AppCompatActivity {
 
+    private String chosenDataAfterUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,5 +93,20 @@ public class MainActivity extends AppCompatActivity {
 //        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+    * Setter and getter used for returning date chosen in datePicker to Modify Expense fragment
+     */
+    public void setChosenDataAfterUpdate(int year, int month, int day) {
+        if ( month < 10 ) {
+            chosenDataAfterUpdate = year + "-0" + month + "-" + day;
+        }  else {
+            chosenDataAfterUpdate = year + "-" + month + "-" + day;
+        }
+    }
+
+    public String getChosenDataAfterUpdate() {
+        return chosenDataAfterUpdate;
     }
 }
