@@ -1,11 +1,13 @@
 package com.michalj.bugdetme;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +32,7 @@ public class ExpensesListFragment extends Fragment implements AdapterView.OnItem
 
     static Spinner typeSpinner;
     static String chosenType;
+    static ListView listView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -39,12 +42,12 @@ public class ExpensesListFragment extends Fragment implements AdapterView.OnItem
     public void onViewCreated(View view, Bundle savedInstanceState) {
         final ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_spinner_item, DatabaseHelper.TYPES_OF_EXPENSES);
+        listView = view.findViewById(R.id.expanses_list);
+        listView.setEmptyView(view.findViewById(R.id.empty));
+
         final DBManager dbManager = new DBManager(getActivity());
         dbManager.open();
-        final Cursor cursor = dbManager.fetch();
-        final ListView listView = view.findViewById(R.id.expanses_list);
-        listView.setEmptyView(view.findViewById(R.id.empty));
-        final SimpleCursorAdapter adapter = new SimpleCursorAdapter(getActivity(), R.layout.activity_view_record, cursor, from, to, 0);
+        final SimpleCursorAdapter adapter = new SimpleCursorAdapter(getActivity(), R.layout.activity_view_record, dbManager.fetch(), from, to, 0);
         adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
             public boolean setViewValue(View aView, Cursor aCursor, int aColumnIndex) {
                 if (aColumnIndex == 2) {
@@ -77,7 +80,6 @@ public class ExpensesListFragment extends Fragment implements AdapterView.OnItem
                 return false;
             }
         });
-        adapter.notifyDataSetChanged();
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -96,16 +98,19 @@ public class ExpensesListFragment extends Fragment implements AdapterView.OnItem
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 typeSpinner.setAdapter(dataAdapter);
 
+                final long _id = Long.parseLong(currentCursor.getString(0));
+
                 int locationIdForSpinner = DatabaseHelper.TYPES_OF_EXPENSES.indexOf(currentCursor.getString(3));
                 typeSpinner.setSelection(locationIdForSpinner);
 
-                EditText changeAmount = updateView.findViewById(R.id.amountEdit);
+                final EditText changeAmount = updateView.findViewById(R.id.amountEdit);
                 changeAmount.setText(String.valueOf(Double.parseDouble(currentCursor.getString(2))/100));
 
-                EditText changeDescription = updateView.findViewById(R.id.descriptionEdit);
+                final EditText changeDescription = updateView.findViewById(R.id.descriptionEdit);
                 changeDescription.setText(currentCursor.getString(4));
 
                 final Button changeDate = updateView.findViewById(R.id.changeDateButton);
+                ((MainActivity)getActivity()).setChosenData(currentCursor.getString(1));
                 changeDate.setText(currentCursor.getString(1));
                 changeDate.setOnClickListener(new View.OnClickListener() {
 
@@ -115,18 +120,41 @@ public class ExpensesListFragment extends Fragment implements AdapterView.OnItem
                         newDateFragment.show(getActivity().getSupportFragmentManager(), "");
                     }
                 });
-                AlertDialog alert = builder.create();
-                alert.show();
-                alert.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                final AlertDialog alert = builder.create();
+
 
                 Button update = updateView.findViewById(R.id.updateButton);
                 update.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getActivity(), "Chosen date: " +
-                                ((MainActivity)getActivity()).getChosenDataAfterUpdate(), Toast.LENGTH_SHORT).show();
+                        final String date = ((MainActivity)getActivity()).getChosenDate();
+                        final double amount = Double.parseDouble(changeAmount.getText().toString())*100;
+                        final String type = typeSpinner.getSelectedItem().toString();
+                        final String desc = changeDescription.getText().toString();
+                        new Thread(new Runnable(){
+                            @Override
+                            public void run(){
+                                dbManager.update(_id, date, amount, type, desc);
+                            }
+                        }).start();
+//                        dbManager.update(_id, date, amount, type, desc);
+                        alert.dismiss();
+                        adapter.changeCursor(dbManager.fetch());
                     }
                 });
+
+                Button delete = updateView.findViewById(R.id.deleteButton);
+                delete.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        long _id = Long.parseLong(currentCursor.getString(0));
+                        dbManager.delete(_id);
+                        alert.dismiss();
+                        adapter.changeCursor(dbManager.fetch());
+                    }
+                });
+                alert.show();
+                alert.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             }
         });
     }
@@ -142,6 +170,12 @@ public class ExpensesListFragment extends Fragment implements AdapterView.OnItem
     }
 
     private void updateAlert() {
+    }
+
+    @Override
+    public void onDestroyView() {
+        ((SimpleCursorAdapter) listView.getAdapter()).getCursor().close();
+        super.onDestroyView();
     }
 
 }

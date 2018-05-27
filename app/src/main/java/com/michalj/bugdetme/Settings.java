@@ -13,6 +13,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Random;
 
 public class Settings extends AppCompatActivity  {
 
@@ -20,7 +24,9 @@ public class Settings extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
+        final Random r = new Random();
+        final DBManager dbManager = new DBManager(this);
+        dbManager.open();
         final SharedPreferences pref = this.getApplicationContext().getSharedPreferences(DatabaseHelper.SHARED_PREFERENCES_NAME, 0);
         final EditText monthlyBudget = findViewById(R.id.editTextMonthlyBudget);
         final EditText savingsGoal = findViewById(R.id.editTextSavingsGoal);
@@ -50,6 +56,35 @@ public class Settings extends AppCompatActivity  {
 
             }
 
+        });
+
+        Button fillDb = findViewById(R.id.fillDBWithSampleData);
+        fillDb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                new Thread(new Runnable(){
+                    @Override
+                    public void run(){
+                        String dt = "2017-05-19";
+                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                        Calendar c = Calendar.getInstance();
+
+                        for (int i = 0; i < 360; i++) {
+                            int amountToInsert = r.nextInt(1000);
+                            try {
+                                c.setTime(sdf.parse(dt));
+                            } catch (ParseException e) {
+                            }
+                            c.add(Calendar.DATE, 1);  // number of days to add
+                            dt = sdf.format(c.getTime());  // dt is now the new date
+                            String type = DatabaseHelper.TYPES_OF_EXPENSES.get(r.nextInt(DatabaseHelper.TYPES_OF_EXPENSES.size()-1));
+                            String description = String.valueOf(i);
+                            dbManager.insert(dt, amountToInsert, type, description);
+                        }
+                    }
+                }).start();
+            }
         });
     }
 

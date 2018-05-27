@@ -47,6 +47,11 @@ public class DBManager {
     }
 
     public Cursor expensesInCurrentMonth() {
+
+        return database.rawQuery("SELECT sum(amount) FROM " + DatabaseHelper.TABLE_NAME + " WHERE strftime('%Y',date) = strftime('%Y',date('now')) AND  strftime('%m',date) = strftime('%m',date('now'))",null);
+    }
+
+    public Cursor expensesInMonth() {
         return database.rawQuery("SELECT sum(amount) FROM " + DatabaseHelper.TABLE_NAME,null);
     }
 
@@ -56,14 +61,16 @@ public class DBManager {
     }
 
 
-//    public int update(long _id, String name, String desc) {
-//        ContentValues contentValues = new ContentValues();
-//        contentValues.put(DatabaseHelper.SUBJECT, name);
-//        contentValues.put(DatabaseHelper.DESC, desc);
-//        int i = database.update(DatabaseHelper.TABLE_NAME, contentValues, DatabaseHelper._ID + " = " + _id, null);
-//        return i;
-//    }
-//
+    public int update(long _id, String date, double amount, String type, String desc) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(DatabaseHelper.DATE, date);
+        contentValues.put(DatabaseHelper.AMOUNT, amount);
+        contentValues.put(DatabaseHelper.TYPE, type);
+        contentValues.put(DatabaseHelper.DESCRIPTION, desc);
+        int i = database.update(DatabaseHelper.TABLE_NAME, contentValues, DatabaseHelper._ID + " = " + _id, null);
+        return i;
+    }
+
     public void delete(long _id) {
         database.delete(DatabaseHelper.TABLE_NAME, DatabaseHelper._ID + "=" + _id, null);
     }

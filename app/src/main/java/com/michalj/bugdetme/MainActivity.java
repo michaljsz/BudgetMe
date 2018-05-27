@@ -15,17 +15,13 @@ import android.widget.Button;
 import android.widget.PopupMenu;
 public class MainActivity extends AppCompatActivity {
 
-    private String chosenDataAfterUpdate;
+    private String chosenDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         final ViewPager viewPager =  findViewById(R.id.pager);
-        SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0);
-//        SharedPreferences.Editor editor = pref.edit();
-//        editor.putFloat(DatabaseHelper.MONTHLY_BUDGET,4000F);
-//        editor.apply();
 
         TabLayout tabLayout =  findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Month"));
@@ -98,15 +94,12 @@ public class MainActivity extends AppCompatActivity {
     /**
     * Setter and getter used for returning date chosen in datePicker to Modify Expense fragment
      */
-    public void setChosenDataAfterUpdate(int year, int month, int day) {
-        if ( month < 10 ) {
-            chosenDataAfterUpdate = year + "-0" + month + "-" + day;
-        }  else {
-            chosenDataAfterUpdate = year + "-" + month + "-" + day;
-        }
+    public void setChosenData(String date) {
+            chosenDate = date;
+
     }
 
-    public String getChosenDataAfterUpdate() {
-        return chosenDataAfterUpdate;
+    public String getChosenDate() {
+        return chosenDate;
     }
 }

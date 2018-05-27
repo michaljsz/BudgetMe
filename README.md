@@ -1,5 +1,5 @@
 # BudgetMe
-
+![](/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.png)
 
 ## Budgeting app for Android
 This app helps you to take control over your expenses. 
