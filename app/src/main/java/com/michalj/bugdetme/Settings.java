@@ -1,8 +1,12 @@
 package com.michalj.bugdetme;
 
+import android.Manifest;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -33,6 +37,10 @@ public class Settings extends AppCompatActivity  {
         monthlyBudget.setText(String.valueOf(pref.getFloat(DatabaseHelper.MONTHLY_BUDGET,0)));
         savingsGoal.setText(String.valueOf(pref.getFloat(DatabaseHelper.SAVINGS_GOAL,0)));
 
+
+        ActivityCompat.requestPermissions(Settings.this,
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+
         Button submitButton = findViewById(R.id.submitBudgetAndGoal);
         submitButton.setOnClickListener(new View.OnClickListener() {
 
@@ -52,8 +60,6 @@ public class Settings extends AppCompatActivity  {
             @Override
             public void onClick(View arg0) {
                 backUpToSD();
-                Toast.makeText(Settings.this,getApplicationContext().getDatabasePath(DatabaseHelper.DB_NAME).toString(),Toast.LENGTH_SHORT).show();
-
             }
 
         });
@@ -88,16 +94,31 @@ public class Settings extends AppCompatActivity  {
         });
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                } else {
+                    Toast.makeText(Settings.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
+                }
+                return;
+            }
+        }
+    }
+
     public void backUpToSD(){
         try {
-            File sd = Environment.getExternalStorageDirectory();
-            File data = Environment.getDataDirectory();
+            File[] sdCard = getApplicationContext().getExternalFilesDirs(Environment.DIRECTORY_DOCUMENTS);
+            File sd = sdCard[1];
 
             if (sd.canWrite()) {
-                String currentDBPath = getApplicationContext().getDatabasePath(DatabaseHelper.DB_NAME)+"";
-                String backupDBPath = "BudgetMeBackup.db";
-                File currentDB = new File(data, currentDBPath);
-                File backupDB = new File(sd, backupDBPath);
+                String currentDBPath = String.valueOf(getApplicationContext().getDatabasePath(DatabaseHelper.DB_NAME));
+                File currentDB = new File(currentDBPath);
+                File backupDB = new File(sd,"BudgetMeBackup.db");
+                Toast.makeText(getApplicationContext(), String.valueOf(backupDB), Toast.LENGTH_SHORT).show();
+
 
                 if (currentDB.exists()) {
                     FileChannel src = new FileInputStream(currentDB).getChannel();
@@ -112,4 +133,5 @@ public class Settings extends AppCompatActivity  {
             Toast.makeText(getApplicationContext(), "Import Failed!", Toast.LENGTH_SHORT).show();
         }
     }
+
 }

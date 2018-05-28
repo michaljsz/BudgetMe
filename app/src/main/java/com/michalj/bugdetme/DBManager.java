@@ -47,12 +47,11 @@ public class DBManager {
     }
 
     public Cursor expensesInCurrentMonth() {
-
         return database.rawQuery("SELECT sum(amount) FROM " + DatabaseHelper.TABLE_NAME + " WHERE strftime('%Y',date) = strftime('%Y',date('now')) AND  strftime('%m',date) = strftime('%m',date('now'))",null);
     }
 
-    public Cursor expensesInMonth() {
-        return database.rawQuery("SELECT sum(amount) FROM " + DatabaseHelper.TABLE_NAME,null);
+    public Cursor expensesInMonth(String year, String month) {
+        return database.rawQuery("SELECT sum(amount) FROM " + DatabaseHelper.TABLE_NAME + " WHERE strftime('%Y',date) = '" + year + "' AND  strftime('%m',date) = '" + month + "'",null);
     }
 
     public Cursor typeSumCurrentMonth(String expenseType) {

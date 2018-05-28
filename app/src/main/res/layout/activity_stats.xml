@@ -30,7 +30,7 @@
             android:id="@+id/yearBarTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
             android:text="@string/spending_in_last_12_months"
             android:textSize="20sp" />
 
@@ -38,7 +38,7 @@
             android:id="@+id/yearBarChart"
             android:layout_width="336dp"
             android:layout_height="336dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="36dp"/>
 
     </LinearLayout>

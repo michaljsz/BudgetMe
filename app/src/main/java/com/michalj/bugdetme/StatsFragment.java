@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -21,6 +23,7 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class StatsFragment extends Fragment {
@@ -30,6 +33,7 @@ public class StatsFragment extends Fragment {
             Color.rgb(118, 174, 175), Color.rgb(15, 127, 127),
             Color.rgb(42, 109, 130),
             Color.rgb(0, 128, 128)};
+    private DBManager dbManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -38,7 +42,7 @@ public class StatsFragment extends Fragment {
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        DBManager dbManager = new DBManager(getActivity());
+        dbManager = new DBManager(getActivity());
         dbManager.open();
 
         // Expenses this month by type Pie chart
@@ -76,46 +80,56 @@ public class StatsFragment extends Fragment {
         pieChart.animateXY(1000, 1000);
 
 
-        //Expenses by month Bar chart
+        // Expenses by month Bar chart
+
+
         BarChart barChart = getActivity().findViewById(R.id.yearBarChart);
-        ArrayList<String> xAxis = new ArrayList<>();
-        xAxis.add("JAN");
-        xAxis.add("FEB");
-        xAxis.add("MAR");
-        xAxis.add("APR");
-        xAxis.add("MAY");
-        xAxis.add("JUN");
-        xAxis.add("JUL");
-        xAxis.add("AUG");
-        xAxis.add("SEPT");
-        xAxis.add("OCT");
-        xAxis.add("NOV");
-        xAxis.add("DEC");
+        final ArrayList<String> xAxis = new ArrayList<>();
+        final ArrayList<BarEntry> valueSet = new ArrayList<>();
 
-        ArrayList<BarEntry> valueSet1 = new ArrayList<>();
-        BarEntry v1e1 = new BarEntry(110.000f, 0); // Jan
-        valueSet1.add(v1e1);
-        BarEntry v1e2 = new BarEntry(40.000f, 1); // Feb
-        valueSet1.add(v1e2);
-        BarEntry v1e3 = new BarEntry(60.000f, 2); // Mar
-        valueSet1.add(v1e3);
-        BarEntry v1e4 = new BarEntry(30.000f, 3); // Apr
-        valueSet1.add(v1e4);
-        BarEntry v1e5 = new BarEntry(90.000f, 4); // May
-        valueSet1.add(v1e5);
-        BarEntry v1e6 = new BarEntry(100.000f, 5); // Jun
-        valueSet1.add(v1e6);
+        // Getting first month for graph
+        final Calendar c = Calendar.getInstance();
+        int currMonth = c.get(Calendar.MONTH) + 2;
+        int currYear = c.get(Calendar.YEAR) - 1;
 
-        BarDataSet barDataSet2 = new BarDataSet(valueSet1, "Months");
-        barDataSet2.setColors(chartColors);
-        barDataSet2.setValueTextColor(Color.WHITE);
-        barDataSet2.setValueTextSize(12f);
+        Cursor monthsCursor;
+
+        // Loop for inserting label names and sum of expenses from last 12 months
+        for (int j = 0; j < 12; j++) {
+            xAxis.add(theMonth(currMonth));
+            if ( currMonth < 10) {
+                monthsCursor = dbManager.expensesInMonth(String.valueOf(currYear),"0" + String.valueOf(currMonth));
+            } else {
+                monthsCursor = dbManager.expensesInMonth(String.valueOf(currYear),String.valueOf(currMonth));
+            }
+            monthsCursor.moveToFirst();
+
+            String expenses = monthsCursor.getString(0);
+            if ( expenses != null  ) {
+                float expensesFloat = Float.parseFloat(expenses)/100;
+                BarEntry value = new BarEntry(expensesFloat, j);
+                valueSet.add(value);
+            }
+            if ( currMonth == 12 ) {
+                currYear++;
+            }
+            if ( currMonth < 12 ) {
+                currMonth ++;
+            } else {
+                currMonth = 1;
+            }
+        }
+
+        BarDataSet barDataSet = new BarDataSet(valueSet, "Months");
+        barDataSet.setColors(chartColors);
+        barDataSet.setValueTextColor(Color.WHITE);
+        barDataSet.setValueTextSize(12f);
 
 
-        BarData barData = new BarData(xAxis, barDataSet2);
+        BarData barData = new BarData(xAxis, barDataSet);
         barChart.setData(barData);
         barChart.getAxisLeft().setTextColor(Color.WHITE);
-        barChart.getAxisRight().setTextColor(Color.WHITE);
+        barChart.getAxisRight().setDrawLabels(false);
         barChart.getXAxis().setTextColor(Color.WHITE);
         barChart.getLegend().setTextColor(Color.WHITE);
         barChart.getLegend().setEnabled(false);
@@ -126,5 +140,27 @@ public class StatsFragment extends Fragment {
 
     }
 
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+        }
+    }
 
+    @Override
+    public void onDestroyView() {
+        dbManager.close();
+        super.onDestroyView();
+    }
+
+    /**
+     * Used for getting Label names for bar chart
+     * @param month - number of month from 1 to 12
+     * @return Short name of month
+     */
+    public static String theMonth(int month){
+        String[] monthNames = {"","JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEPT", "OCT", "NOV", "DEC"};
+        return monthNames[month];
+    }
 }

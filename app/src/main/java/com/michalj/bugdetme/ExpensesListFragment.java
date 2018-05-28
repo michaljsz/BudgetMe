@@ -33,6 +33,7 @@ public class ExpensesListFragment extends Fragment implements AdapterView.OnItem
     static Spinner typeSpinner;
     static String chosenType;
     static ListView listView;
+    private DBManager dbManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,7 +46,7 @@ public class ExpensesListFragment extends Fragment implements AdapterView.OnItem
         listView = view.findViewById(R.id.expanses_list);
         listView.setEmptyView(view.findViewById(R.id.empty));
 
-        final DBManager dbManager = new DBManager(getActivity());
+        dbManager = new DBManager(getActivity());
         dbManager.open();
         final SimpleCursorAdapter adapter = new SimpleCursorAdapter(getActivity(), R.layout.activity_view_record, dbManager.fetch(), from, to, 0);
         adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
@@ -175,6 +176,7 @@ public class ExpensesListFragment extends Fragment implements AdapterView.OnItem
     @Override
     public void onDestroyView() {
         ((SimpleCursorAdapter) listView.getAdapter()).getCursor().close();
+        dbManager.close();
         super.onDestroyView();
     }
 

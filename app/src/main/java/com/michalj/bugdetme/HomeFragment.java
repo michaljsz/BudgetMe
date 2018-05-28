@@ -18,6 +18,8 @@ import java.util.Calendar;
 public class HomeFragment extends Fragment {
 
     private double totalAmountDouble;
+    private DBManager dbManager;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -26,7 +28,7 @@ public class HomeFragment extends Fragment {
 
     public void onViewCreated(View view, Bundle savedInstanceState) {
 
-        DBManager dbManager = new DBManager(getActivity());
+        dbManager = new DBManager(getActivity());
         dbManager.open();
         Cursor cursor = dbManager.expensesInCurrentMonth();
         cursor.moveToFirst();
@@ -72,5 +74,19 @@ public class HomeFragment extends Fragment {
             }
         });
 
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+            getFragmentManager().beginTransaction().detach(this).attach(this).commit();
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        dbManager.close();
+        super.onDestroyView();
     }
 }
