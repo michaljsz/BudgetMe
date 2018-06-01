@@ -24,15 +24,24 @@ public class DatePickerFragment extends DialogFragment {
     private DatePickerDialog.OnDateSetListener dateSetListener =
             new DatePickerDialog.OnDateSetListener() {
                 public void onDateSet(DatePicker view, int year, int month, int day) {
-//                    Toast.makeText(getActivity(), "selected date is " + view.getYear() +
-//                            " / " + (view.getMonth()+1) +
-//                            " / " + view.getDayOfMonth(), Toast.LENGTH_SHORT).show();
+
+                    // Formatting month after it is chosen
                     if ( month < 10 ) {
-                        ((MainActivity) getActivity()).setChosenData(view.getYear() + "-0" +
-                                (view.getMonth() + 1) + "-" + view.getDayOfMonth());
+                        if ( day < 10 ) {
+                            ((MainActivity) getActivity()).setChosenData(view.getYear() + "-0" +
+                                    (view.getMonth() + 1) + "-0" + view.getDayOfMonth());
+                        } else {
+                            ((MainActivity) getActivity()).setChosenData(view.getYear() + "-0" +
+                                    (view.getMonth() + 1) + "-" + view.getDayOfMonth());
+                        }
                     } else {
-                        ((MainActivity) getActivity()).setChosenData(view.getYear() + "-" +
-                                (view.getMonth() + 1) + "-" + view.getDayOfMonth());
+                        if ( day < 10 ) {
+                            ((MainActivity) getActivity()).setChosenData(view.getYear() + "-0" +
+                                    (view.getMonth() + 1) + "-0" + view.getDayOfMonth());
+                        } else {
+                            ((MainActivity) getActivity()).setChosenData(view.getYear() + "-0" +
+                                    (view.getMonth() + 1) + "-" + view.getDayOfMonth());
+                        }
                     }
                 }
             };

@@ -48,16 +48,21 @@ public class ExpensesListFragment extends Fragment implements AdapterView.OnItem
 
         dbManager = new DBManager(getActivity());
         dbManager.open();
+
+        // Creating SimpleCursorAdapter for formatting data
         final SimpleCursorAdapter adapter = new SimpleCursorAdapter(getActivity(), R.layout.activity_view_record, dbManager.fetch(), from, to, 0);
         adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
             public boolean setViewValue(View aView, Cursor aCursor, int aColumnIndex) {
                 if (aColumnIndex == 2) {
+                    // Formatting amount column
                     double amountInZl = Double.parseDouble(aCursor.getString(aColumnIndex))/100;
                     TextView textView = (TextView) aView;
                     textView.setText(String.format("%.2f",amountInZl) + getString(R.string.PLN));
                     return true;
                 }
+
                 if (aColumnIndex == 3) {
+                    // Adding icon according to type of expense
                     ImageView img = (ImageView) aView;
                     String type = aCursor.getString(aColumnIndex);
                     if (type.equalsIgnoreCase("fmcg")) {
@@ -91,10 +96,12 @@ public class ExpensesListFragment extends Fragment implements AdapterView.OnItem
                 final View updateView = inflater.inflate(R.layout.modify_expense,
                         null, false);
 
+                // Creating alerd dialog window to display on expense click
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setView(updateView);
                 final Cursor currentCursor = (Cursor) listView.getItemAtPosition(position);
 
+                // Getting data concerning clicked expense and populating alert dialog with it
                 typeSpinner = updateView.findViewById(R.id.modifyTypeSpinner);
                 dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 typeSpinner.setAdapter(dataAdapter);
@@ -138,8 +145,8 @@ public class ExpensesListFragment extends Fragment implements AdapterView.OnItem
                                 dbManager.update(_id, date, amount, type, desc);
                             }
                         }).start();
-//                        dbManager.update(_id, date, amount, type, desc);
                         alert.dismiss();
+                        // Updating list after changes were made
                         adapter.changeCursor(dbManager.fetch());
                     }
                 });
@@ -151,6 +158,7 @@ public class ExpensesListFragment extends Fragment implements AdapterView.OnItem
                         long _id = Long.parseLong(currentCursor.getString(0));
                         dbManager.delete(_id);
                         alert.dismiss();
+                        // Updating list after changes were made
                         adapter.changeCursor(dbManager.fetch());
                     }
                 });

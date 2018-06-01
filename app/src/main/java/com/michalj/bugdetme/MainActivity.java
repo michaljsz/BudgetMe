@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         final ViewPager viewPager =  findViewById(R.id.pager);
 
+        // Setting tabs for ViewPager
         TabLayout tabLayout =  findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("Month"));
         tabLayout.addTab(tabLayout.newTab().setText("List"));
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Menu button next to tabLayout
         final Button menu = findViewById(R.id.menuButton);
         menu.setOnClickListener(new View.OnClickListener() {
 

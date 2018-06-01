@@ -30,6 +30,8 @@ public class HomeFragment extends Fragment {
 
         dbManager = new DBManager(getActivity());
         dbManager.open();
+
+        // Getting total expenses in current month
         Cursor cursor = dbManager.expensesInCurrentMonth();
         cursor.moveToFirst();
         TextView totalAmount = view.findViewById(R.id.amountInCurrentMonth);
@@ -40,12 +42,15 @@ public class HomeFragment extends Fragment {
             totalAmount.setText("0");
         }
 
+        // Getting remaining funds in current month
         SharedPreferences pref = getActivity().getApplicationContext().getSharedPreferences(DatabaseHelper.SHARED_PREFERENCES_NAME, 0);
         double monthlyGoal = pref.getFloat(DatabaseHelper.MONTHLY_BUDGET,0);
         TextView remainingToGoal = getActivity().findViewById(R.id.remainingAmountToGoal);
         double remainingFunds = monthlyGoal-totalAmountDouble;
         remainingToGoal.setText(String.format("%.2f",(remainingFunds))+getString(R.string.PLN));
 
+
+        // Setting goal index
         TextView goalIndex = getActivity().findViewById(R.id.indexToGoal);
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -55,6 +60,7 @@ public class HomeFragment extends Fragment {
             goalIndex.setText("0");
 
         }
+        // Setting green or red color for index
         if ( ((totalAmountDouble)/(monthlyGoal/30.0*day)*100) < 100 ) {
             goalIndex.setTextColor(Color.parseColor("#008000"));
         } else {

@@ -37,10 +37,7 @@ public class Settings extends AppCompatActivity  {
         monthlyBudget.setText(String.valueOf(pref.getFloat(DatabaseHelper.MONTHLY_BUDGET,0)));
         savingsGoal.setText(String.valueOf(pref.getFloat(DatabaseHelper.SAVINGS_GOAL,0)));
 
-
-        ActivityCompat.requestPermissions(Settings.this,
-                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
-
+        // Button for setting monthly budget and savings goal
         Button submitButton = findViewById(R.id.submitBudgetAndGoal);
         submitButton.setOnClickListener(new View.OnClickListener() {
 
@@ -54,6 +51,11 @@ public class Settings extends AppCompatActivity  {
             }
         });
 
+        // Checking if app has permission to save backup to sd
+        ActivityCompat.requestPermissions(Settings.this,
+                new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+
+
         Button backupButton = findViewById(R.id.dbBackupButton);
         backupButton.setOnClickListener(new View.OnClickListener() {
 
@@ -64,6 +66,8 @@ public class Settings extends AppCompatActivity  {
 
         });
 
+
+        // Button for adding one random expense for every last 360 days
         Button fillDb = findViewById(R.id.fillDBWithSampleData);
         fillDb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,8 +86,8 @@ public class Settings extends AppCompatActivity  {
                                 c.setTime(sdf.parse(dt));
                             } catch (ParseException e) {
                             }
-                            c.add(Calendar.DATE, 1);  // number of days to add
-                            dt = sdf.format(c.getTime());  // dt is now the new date
+                            c.add(Calendar.DATE, 1);
+                            dt = sdf.format(c.getTime());
                             String type = DatabaseHelper.TYPES_OF_EXPENSES.get(r.nextInt(DatabaseHelper.TYPES_OF_EXPENSES.size()-1));
                             String description = String.valueOf(i);
                             dbManager.insert(dt, amountToInsert, type, description);

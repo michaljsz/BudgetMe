@@ -81,8 +81,6 @@ public class StatsFragment extends Fragment {
 
 
         // Expenses by month Bar chart
-
-
         BarChart barChart = getActivity().findViewById(R.id.yearBarChart);
         final ArrayList<String> xAxis = new ArrayList<>();
         final ArrayList<BarEntry> valueSet = new ArrayList<>();

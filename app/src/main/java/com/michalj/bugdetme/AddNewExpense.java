@@ -38,10 +38,10 @@ public class AddNewExpense extends AppCompatActivity implements AdapterView.OnIt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_new_expense);
 
+        final TextView descriptionEditText = findViewById(R.id.descriptionInput);
+
         final Spinner typeSpinner = findViewById(R.id.typeSpinner);
         typeSpinner.setOnItemSelectedListener(this);
-
-        final TextView descriptionEditText = findViewById(R.id.descriptionInput);
 
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, DatabaseHelper.TYPES_OF_EXPENSES);
@@ -110,8 +110,9 @@ public class AddNewExpense extends AppCompatActivity implements AdapterView.OnIt
 
     }
 
-    private void alertFormElements() {
 
+    // Alert dialog that is shown when after adding car expense
+    private void alertFormElements() {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View formElementsView = inflater.inflate(R.layout.car_data,
                 null, false);
