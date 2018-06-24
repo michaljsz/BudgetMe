@@ -76,7 +76,7 @@ public class Settings extends AppCompatActivity  {
                 new Thread(new Runnable(){
                     @Override
                     public void run(){
-                        String dt = "2017-05-19";
+                        String dt = "2017-07-19";
                         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
                         Calendar c = Calendar.getInstance();
 

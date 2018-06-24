@@ -32,8 +32,18 @@ public class DBManager {
         contentValue.put(DatabaseHelper.AMOUNT, amount);
         contentValue.put(DatabaseHelper.TYPE, type);
         contentValue.put(DatabaseHelper.DESCRIPTION, desc);
-
         database.insert(DatabaseHelper.TABLE_NAME, null, contentValue);
+    }
+
+    public void insertCarData(int id, String date, int amount, int mileage,double fuel, String desc) {
+        ContentValues contentValue = new ContentValues();
+        contentValue.put(DatabaseHelper._CAR_ID, id);
+        contentValue.put(DatabaseHelper.CAR_DATE, date);
+        contentValue.put(DatabaseHelper.CAR_AMOUNT, amount);
+        contentValue.put(DatabaseHelper.MILEAGE, mileage);
+        contentValue.put(DatabaseHelper.FUEL_VOLUME, fuel);
+        contentValue.put(DatabaseHelper.CAR_DESCRIPTION, desc);
+        database.insert(DatabaseHelper.CAR_TABLE_NAME, null, contentValue);
     }
 
     public Cursor fetch() {
@@ -46,17 +56,38 @@ public class DBManager {
         return cursor;
     }
 
+    public Cursor getLastId() {
+        return database.rawQuery("SELECT MAX(" + DatabaseHelper._ID + ") FROM " + DatabaseHelper.TABLE_NAME,null);
+    }
+
     public Cursor expensesInCurrentMonth() {
-        return database.rawQuery("SELECT sum(amount) FROM " + DatabaseHelper.TABLE_NAME + " WHERE strftime('%Y',date) = strftime('%Y',date('now')) AND  strftime('%m',date) = strftime('%m',date('now'))",null);
+        return database.rawQuery("SELECT sum(amount) FROM " + DatabaseHelper.TABLE_NAME +
+                " WHERE strftime('%Y',date) = strftime('%Y',date('now')) AND  " +
+                "strftime('%m',date) = strftime('%m',date('now'))",null);
     }
 
     public Cursor expensesInMonth(String year, String month) {
-        return database.rawQuery("SELECT sum(amount) FROM " + DatabaseHelper.TABLE_NAME + " WHERE strftime('%Y',date) = '" + year + "' AND  strftime('%m',date) = '" + month + "'",null);
+        return database.rawQuery("SELECT sum(amount) FROM " + DatabaseHelper.TABLE_NAME +
+                " WHERE strftime('%Y',date) = '" + year + "' AND  strftime('%m',date) = '" +
+                month + "'",null);
     }
 
-    public Cursor typeSumCurrentMonth(String expenseType) {
-        return database.rawQuery("SELECT COALESCE(sum(" + DatabaseHelper.AMOUNT + "),0) FROM " + DatabaseHelper.TABLE_NAME +
-                " WHERE " + DatabaseHelper.TYPE + " = " + "'"+expenseType+"'", null);
+    public Cursor expensesInCurrentMonthByType(String expenseType) {
+        return database.rawQuery("SELECT COALESCE(sum(" + DatabaseHelper.AMOUNT + "),0) FROM " +
+                DatabaseHelper.TABLE_NAME + " WHERE " + DatabaseHelper.TYPE + " = " + "'"+expenseType+"' " +
+                "AND strftime('%Y',date) = strftime('%Y',date('now')) AND " +
+                "strftime('%m',date) = strftime('%m',date('now'))", null);
+    }
+
+    public Cursor mileage() {
+        return database.rawQuery("SELECT " + DatabaseHelper.MILEAGE + " FROM " +
+                DatabaseHelper.CAR_TABLE_NAME + " ORDER BY " + DatabaseHelper._CAR_ID +
+                " DESC LIMIT 1", null);
+    }
+
+    public Cursor burntFuel() {
+        return database.rawQuery("SELECT sum(" + DatabaseHelper.FUEL_VOLUME + ") FROM " +
+                DatabaseHelper.CAR_TABLE_NAME, null);
     }
 
 

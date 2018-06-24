@@ -29,4 +29,7 @@
     <string name="apply_changes">Apply changes</string>
     <string name="spending_in_last_12_months">Spending in last 12 months</string>
     <string name="fill_db_with_some_data">Fill DB with some data</string>
+    <string name="car_data">Car data</string>
+    <string name="how_many_litres_of_fuel">How many litres of fuel</string>
+    <string name="fuel_burnt_100km">Fuel burnt/100km</string>
 </resources>

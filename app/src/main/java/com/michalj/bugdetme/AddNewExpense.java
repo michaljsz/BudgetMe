@@ -1,9 +1,10 @@
 package com.michalj.bugdetme;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,12 +15,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -27,11 +26,16 @@ import java.util.Date;
 
 public class AddNewExpense extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    private String chosenType, amountString;
+    private String chosenType;
+    private String amountString;
+    private String description;
+    private String type;
+    private String date;
+    private int mileage;
     private double amountDouble;
     private int amountInt;
     private DBManager dbManager;
-    private String description;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,10 +75,16 @@ public class AddNewExpense extends AppCompatActivity implements AdapterView.OnIt
                     } else {
                         Date todayDate = Calendar.getInstance().getTime();
                         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-                        final String date = formatter.format(todayDate);
-                        final String type = typeSpinner.getSelectedItem().toString();
+                        date = formatter.format(todayDate);
+                        type = typeSpinner.getSelectedItem().toString();
                         description = descriptionEditText.getText().toString();
-                        dbManager.insert(date, amountInt, type, description);
+
+                        new Thread(new Runnable(){
+                            @Override
+                            public void run(){
+                                dbManager.insert(date, amountInt, type, description);
+                            }
+                        }).start();
 
                         if (chosenType.equalsIgnoreCase("Transport") || chosenType.equalsIgnoreCase("car")) {
                             alertFormElements();
@@ -111,50 +121,54 @@ public class AddNewExpense extends AppCompatActivity implements AdapterView.OnIt
     }
 
 
-    // Alert dialog that is shown when after adding car expense
+    // Alert dialog with additional car data
     private void alertFormElements() {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View formElementsView = inflater.inflate(R.layout.car_data,
-                null, false);
-        final EditText carMileage = formElementsView
-                .findViewById(R.id.carMileage);
-        final CheckBox fuelCheckBox = formElementsView
-                .findViewById(R.id.myCheckBox);
-        final RadioGroup fuelTypeGroup = formElementsView
-                .findViewById(R.id.fuelRadioGroup);
-        fuelTypeGroup.setVisibility(View.GONE);
+        final View formElementsView = inflater.inflate(R.layout.car_data, null, false);
+        final EditText carMileage = formElementsView.findViewById(R.id.carMileage);
+        final CheckBox fuelCheckBox = formElementsView.findViewById(R.id.fuelCheckBox);
+        final EditText fuelVolume = formElementsView.findViewById(R.id.fuelVolume);
+        fuelVolume.setVisibility(View.GONE);
+        final Button submitCarData = formElementsView.findViewById(R.id.submitCarData);
 
         fuelCheckBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (fuelCheckBox.isChecked()) {
-                    fuelTypeGroup.setVisibility(View.VISIBLE);
+                    fuelVolume.setVisibility(View.VISIBLE);
                 } else if(!fuelCheckBox.isChecked()) {
-                    fuelTypeGroup.setVisibility(View.GONE);
+                    fuelVolume.setVisibility(View.GONE);
                 }
             }
         });
 
-        new AlertDialog.Builder(AddNewExpense.this).setView(formElementsView)
-                .setTitle("Vehicle data")
-                .setPositiveButton("Submit", new DialogInterface.OnClickListener() {
-                    @TargetApi(11)
-                    public void onClick(DialogInterface dialog, int id) {
 
+        AlertDialog alert = new AlertDialog.Builder(AddNewExpense.this).setView(formElementsView).show();
+        alert.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-                        int selectedId = fuelTypeGroup
-                                .getCheckedRadioButtonId();
+        submitCarData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-                        RadioButton selectedRadioButton =  formElementsView
-                                .findViewById(selectedId);
+                mileage = Integer.parseInt(carMileage.getText().toString());
+                Cursor getIDCursor = dbManager.getLastId();
+                getIDCursor.moveToFirst();
 
-                        dialog.cancel();
-                        finish();
-                        Intent myIntent = new Intent(getBaseContext(),
-                                MainActivity.class);
-                        startActivity(myIntent);
+                final int carId = Integer.parseInt(getIDCursor.getString(0));
+                final double fuelInLitres = Double.parseDouble(fuelVolume.getText().toString());
+                new Thread(new Runnable(){
+                    @Override
+                    public void run(){
+                        dbManager.insertCarData(carId, date, amountInt, mileage, fuelInLitres, description);
                     }
+                }).start();
 
-                }).show();
+                finish();
+                Intent myIntent = new Intent(getBaseContext(),
+                MainActivity.class);
+                startActivity(myIntent);
+            }
+        });
+
     }
 }

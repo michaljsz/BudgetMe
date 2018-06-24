@@ -1,48 +1,66 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:padding="8dp"
+    android:background="@drawable/rounded_layout" >
 
+
+    <TextView
+        android:id="@+id/carDataTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:textSize="24sp"
+        android:layout_alignParentTop="true"
+        android:text="@string/car_data" />
 
     <EditText
         android:id="@+id/carMileage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="numberDecimal"
-        android:layout_alignParentTop="true"
+        android:layout_below="@id/carDataTitle"
         android:hint="@string/car_mileage">
-
-
     </EditText>
 
     <CheckBox
-        android:id="@+id/myCheckBox"
+        android:id="@+id/fuelCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
         android:text="@string/have_you_refueled"
         android:layout_below="@id/carMileage"/>
 
-    <RadioGroup
-        android:id="@+id/fuelRadioGroup"
+    <EditText
+        android:id="@+id/fuelVolume"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/myCheckBox" >
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:inputType="numberDecimal"
+        android:layout_below="@id/fuelCheckBox"
+        android:hint="@string/how_many_litres_of_fuel">
+    </EditText>
 
-
-        <RadioButton
-            android:id="@+id/petrolRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/petrol" />
-
-
-        <RadioButton
-            android:id="@+id/lpgRadioButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/lpg" />
-
-    </RadioGroup>
+    <Button
+        android:id="@+id/submitCarData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/fuelVolume"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/rounded_button"
+        android:textAllCaps="false"
+        android:text="@string/submit" />
 
 </RelativeLayout>

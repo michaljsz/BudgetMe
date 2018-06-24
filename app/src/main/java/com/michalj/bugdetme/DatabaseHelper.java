@@ -13,13 +13,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // Table Name
     public static final String TABLE_NAME = "Expanses";
+    public static final String CAR_TABLE_NAME = "CarData";
 
-    // Table columns
+    // Main table columns
     public static final String _ID = "_id";
     public static final String DATE = "date";
     public static final String AMOUNT = "amount";
     public static final String TYPE = "type";
     public static final String DESCRIPTION = "description";
+
+    // Main table columns
+    public static final String _CAR_ID = "_id";
+    public static final String CAR_DATE = "date";
+    public static final String CAR_AMOUNT = "amount";
+    public static final String MILEAGE = "mileage";
+    public static final String CAR_DESCRIPTION = "description";
+    public static final String FUEL_VOLUME = "fuel";
+
 
     // Shared preferences
     public static final String SHARED_PREFERENCES_NAME = "Budged prefs";
@@ -39,6 +49,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME +
             "(" + _ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             DATE + " TEXT, " + AMOUNT + " INTEGER, " + TYPE + " TEXT, " + DESCRIPTION + " TEXT);";
+    private static final String CREATE_CAR_TABLE = "CREATE TABLE " + CAR_TABLE_NAME +
+            "(" + _CAR_ID + " INTEGER PRIMARY KEY, " + CAR_DATE + " TEXT, " + CAR_AMOUNT + " INTEGER, " +
+            MILEAGE + " INTEGER, " + FUEL_VOLUME + " REAL, " + CAR_DESCRIPTION + " TEXT);";
 
 
     public DatabaseHelper(Context context) {
@@ -48,6 +61,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE);
+        db.execSQL(CREATE_CAR_TABLE);
     }
 
     @Override

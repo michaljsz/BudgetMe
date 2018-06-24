@@ -41,6 +41,23 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="36dp"/>
 
+        <TextView
+            android:id="@+id/fuelMileage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/fuel_burnt_100km"
+            android:textSize="20sp"
+            android:layout_marginBottom="36dp"/>
+
+        <EditText
+            android:id="@+id/fuelBurnt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:layout_marginBottom="36dp"/>
+
     </LinearLayout>
 
 </ScrollView>

@@ -7,12 +7,10 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SimpleCursorAdapter;
-import android.widget.Toast;
+import android.widget.EditText;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -20,7 +18,6 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -56,7 +53,7 @@ public class StatsFragment extends Fragment {
         int i=0;
         Cursor cursorInLoop;
         for ( String x : DatabaseHelper.TYPES_OF_EXPENSES) {
-            cursorInLoop = dbManager.typeSumCurrentMonth(x);
+            cursorInLoop = dbManager.expensesInCurrentMonthByType(x);
             cursorInLoop.moveToFirst();
             double sum = Double.parseDouble(cursorInLoop.getString(0))/100.0;
             float sumF = (float) sum;
@@ -134,6 +131,15 @@ public class StatsFragment extends Fragment {
         barChart.setDescription("");
         barChart.animateXY(2500, 2500);
         barChart.invalidate();
+
+        EditText fuelMileage = getActivity().findViewById(R.id.fuelBurnt);
+        Cursor getMileageCursor = dbManager.mileage();
+        getMileageCursor.moveToFirst();
+        double mileage = Double.parseDouble(getMileageCursor.getString(0));
+        Cursor getFuelCursor = dbManager.burntFuel();
+        getFuelCursor.moveToFirst();
+        double fuel = Double.parseDouble(getFuelCursor.getString(0));
+        fuelMileage.setText(String.valueOf(fuel/mileage*100));
 
 
     }
